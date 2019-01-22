@@ -1,0 +1,6 @@
+[submodule "HAL/libopencm3"]
+	path = HAL/libopencm3
+	url = https://github.com/libopencm3/libopencm3
+[submodule "OS/FreeRTOS"]
+	path = OS/FreeRTOS
+	url = https://github.com/larchuto/FreeRTOS

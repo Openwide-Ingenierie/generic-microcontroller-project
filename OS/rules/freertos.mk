@@ -1,0 +1,31 @@
+FREERTOS_SRC_DIR=$(OS_DIR)/FreeRTOS/Source
+
+OS_LIB_PATH=$(OS_BUILD_DIR)/$(OS_WD)
+OS_LIB_NAME=FreeRTOS
+OS_INCLUDE_PATH=$(FREERTOS_SRC_DIR)/include
+OS_INCLUDE_PATH+=$(FREERTOS_SRC_DIR)/portable/$(FREERTOS_MCU_PORT)/
+OS_INCLUDE_PATH+=$(dir $(FREERTOS_CONFIG))
+OS_DEFINES=
+
+FREERTOS_SRC=$(wildcard $(FREERTOS_SRC_DIR)/*.c)
+FREERTOS_SRC+=$(FREERTOS_SRC_DIR)/portable/MemMang/heap_$(FREERTOS_HEAP_IMPLEM).c
+#FREERTOS_SRC+=$(FREERTOS_SRC_DIR)/portable/Common/mpu_wrappers.c
+FREERTOS_SRC+=$(wildcard $(FREERTOS_SRC_DIR)/portable/$(FREERTOS_MCU_PORT)/*.c)
+FREERTOS_INC_FLAGS=$(patsubst %,-I%, $(OS_INCLUDE_PATH))
+FREERTOS_OBJ=$(addprefix $(OS_BUILD_DIR)/, $(FREERTOS_SRC:.c=.o))
+FREERTOS_AR=$(OS_LIB_PATH)/lib$(OS_LIB_NAME).a
+
+
+os: $(FREERTOS_AR)
+
+$(FREERTOS_AR): $(FREERTOS_OBJ)
+	@$(AR) $(ARFLAGS) $(OS_LIB_PATH)/libFreeRTOS.a $^
+
+$(OS_BUILD_DIR)/%.o: %.c $(FREERTOS_CONFIG)
+	@mkdir -p $(@D)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(CFLAGS_DEBUG) $(FREERTOS_INC_FLAGS)
+
+clean_os:
+	rm -rf $(OS_BUILD_DIR)/$(OS_WD)
+
+.PHONY: clean_os

@@ -1,0 +1,10 @@
+OS_LIB_PATH=
+OS_LIB_NAME=
+OS_INCLUDE_PATH=
+OS_DEFINES=
+
+os:
+
+clean_os:
+
+.PHONY: clean_os
