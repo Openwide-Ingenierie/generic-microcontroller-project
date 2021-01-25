@@ -32,7 +32,7 @@ int main(void) {
     // led port peripheral clock enabling
     rcc_periph_clock_enable(LED_PORT_RCC);
     // led pin configuration (output mode, low speed, push/pull output)
-	gpio_set_mode(LED_PORT, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, LED_PIN);
+	gpio_mode_setup(LED_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LED_PIN);
 
 
     // blinky task creation
