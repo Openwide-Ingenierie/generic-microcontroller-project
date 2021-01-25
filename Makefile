@@ -13,7 +13,7 @@ AR=$(CROSS_COMPILE)gcc-ar
 ARFLAGS=rcs
 
 # debugger
-GDB=$(CROSS_COMPILE)gdb
+GDB=gdb-multiarch
 GDB_FLAGS=--tui
 
 # flash utility
@@ -89,9 +89,12 @@ flash: release
 	@$(FLASH_TOOL) $(FLASH_TOOL_FLAGS) -c "program_release $(RELEASE_DIR)/$(FIRMWARE)"
 
 gdb: debug
-	@$(GDB) $(GDB_FLAGS) --eval-command='target remote | $(FLASH_TOOL) $(FLASH_TOOL_FLAGS) -c "program_debug $(DEBUG_DIR)/$(FIRMWARE)" \
-										monitor reset halt \
-										load' $(DEBUG_DIR)/$(FIRMWARE)
+	@$(FLASH_TOOL) $(FLASH_TOOL_FLAGS) &
+	#2 sec pause to give openocd time to start
+	@sleep 2
+	@$(GDB) $(GDB_FLAGS) --eval-command 'target remote :3333' --eval-command 'monitor reset halt' --eval-command 'load' $(DEBUG_DIR)/$(FIRMWARE)
+	#kill (with ctrl+C) openocd
+	@kill -9 `ps aux | grep openocd | awk '{print $$2}' | head -1`
 
 clean: clean_release clean_debug
 

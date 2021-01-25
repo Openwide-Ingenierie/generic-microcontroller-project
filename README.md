@@ -9,12 +9,10 @@ In particular you have to :
  - Edit the MCU_TYPE, MCU_FAMILLY, MCU_CORE and ARCH_FLAGS variables to be consistant with your microcontroller
  - Edit the INTERFACE, TRANSPORT and TARGET variables to reflect the debug probe and protocol you are using
  - Edit the OS and HAL variables to select OS and HAL you want to use (see: Using an alternative OS or HAL)
- - Edit the LINK_FILE variable to give the .ld file you want to use (or edit config/link.ld file)
 
 If you need to use libopencm3 and/or FreeRTOS you will have to init and uddate the submodules:
 ```sh
-$> git submodules init
-$> git submodules update
+$> git submodule update --init
 ```
 
 ### Main make targets:
